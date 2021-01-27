@@ -228,6 +228,7 @@ def gameLoop():
 
     # Close the window and quit.
     pygame.quit()
+    
     quit()
 
 gameLoop()

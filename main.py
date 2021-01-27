@@ -1,7 +1,15 @@
-""" 
-A basic pygame template
-"""
- 
+'''
+-------------------------------------------------------------------------------
+Name:	main.py
+
+Purpose: Tech ICS2O1 2021 CPT - Snake Game 
+
+Author:	Hong.C
+
+Created:	date in 01/14/2021
+------------------------------------------------------------------------------
+'''
+
 import pygame
 import time
 import random
@@ -165,7 +173,6 @@ def gameLoop():
             if paragraph_go:
                 paragraph_x += paragraph_x_velocity
             
-
     #Game over if snake hits wall   
         if head_x >= screen_width or head_x < 0 or head_y >= screen_height or head_y < 0:
             game_over_sfx.play()    
@@ -179,7 +186,7 @@ def gameLoop():
     # Don't put other drawing commands above this, or they will be erased with this command.
         screen.fill(GREY)
 
-        if (snake_length - 1) >= 2 and game_close == False:
+        if (snake_length - 1) >= 20 and game_close == False:
             screen.blit(game_winner_text, [150, 10])
 
     # --- Game logic should go here

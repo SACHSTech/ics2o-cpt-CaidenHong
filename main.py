@@ -32,17 +32,10 @@ screen = pygame.display.set_mode((screen_width, screen_height))
  
 pygame.display.set_caption("Antivirus Snake")
  
-#Load Images
-
-#Positions of Images
-
-#Loop until the user clicks the close button.
-
 # Used to manage how fast the screen updates
 clock = pygame.time.Clock()
  
 # Defining Variables
-
 head_x = 350
 head_y = 250
 head_x_velocity = 0
@@ -82,6 +75,7 @@ score_font = pygame.font.SysFont("comicsansms", 30)
 game_winner_font = pygame.font.SysFont('Oswald',21, True, False)
 game_winner_text = game_winner_font.render("Congratulations! You have beaten the antivirus snake! Keep Going!", True, BLACK)
 
+#Defining Functions
 def user_score(score):
     value = score_font.render("Score:  " + str(score), True, WHITE)
     screen.blit(value, [4, 0])
@@ -129,7 +123,7 @@ def gameLoop():
 # -------- Main Program Loop -----------
     while not game_over:
 
-        # --- Main event loop
+        # Game Over Loop
         while game_close == True:
             screen.fill(RED)
             message("Game Over! Press 1-Quit or 2-Play Again", BLACK)
@@ -145,8 +139,9 @@ def gameLoop():
                     if event.key == pygame.K_2:
                         boop_sfx.play()
                         gameLoop()
-        
-        for event in pygame.event.get(): # User did something
+
+        #Detecting the input of the user
+        for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 print("User asked to quit.")
                 game_over = True 
@@ -167,13 +162,14 @@ def gameLoop():
                     intro_go = not intro_go
                     paragraph_go = not paragraph_go
 
+            #Movement for intro screen
             if intro_go:
                 intro_x += intro_x_velocity
 
             if paragraph_go:
                 paragraph_x += paragraph_x_velocity
             
-    #Game over if snake hits wall   
+        #Game over if snake hits wall   
         if head_x >= screen_width or head_x < 0 or head_y >= screen_height or head_y < 0:
             game_over_sfx.play()    
             game_close = True
@@ -181,27 +177,23 @@ def gameLoop():
         head_x += head_x_velocity
         head_y += head_y_velocity
 
-    # Flag that we are game_over so we exit this loop
-    # First, clear the screen to white or whatever background colour. 
-    # Don't put other drawing commands above this, or they will be erased with this command.
+        #Background
         screen.fill(GREY)
 
+        #Game winning text; if user score is 20 or more, you win
         if (snake_length - 1) >= 20 and game_close == False:
             screen.blit(game_winner_text, [150, 10])
 
-    # --- Game logic should go here
-
-    # --- Drawing code should go here
-        #Food
+        #Displaying the food
         pygame.draw.rect(screen, RED, [food_x, food_y, body, body])
 
-        #Snake Head
-        
+        #How the snake body connects to the snake head
         snake_head = []
         snake_head.append(head_x)
         snake_head.append(head_y)
         snake_list.append(snake_head)
 
+        #If the snake hits it's own body the game is over
         if len(snake_list) > snake_length:
             del snake_list[0]
 
@@ -210,9 +202,11 @@ def gameLoop():
                 game_over_sfx.play()
                 game_close = True
 
+        #User Score
         our_snake(body, snake_list)
         user_score(snake_length - 1)
 
+        #What happens when the snake head hits one of the food blocks
         if head_x == food_x and head_y == food_y:
             food_sfx.play()
             food_x = round(random.randrange(0, screen_width - body) / 10.0) * 10.0
@@ -221,18 +215,18 @@ def gameLoop():
             snake_length += 1
 
         #Introduction
-
         if intro_x < 700:
             pygame.draw.rect(screen, WHITE, [intro_x, intro_y, intro_width, intro_height])
             text = "Welcome to the Antivirus Snake! A computer has\nbeen infected with malware and you have inserted\nthe Anti Virus Snake into the computer. To get rid\nof the malware, you must achieve a score of 20 or\ngreater in order for the antivirus snake to become\nsuccesful. If you reach a score past 20, keep going\nas the Anti Virus Snake will install antivirus and\nmalware protection programs. The higher the\nscore, the more protected the computer is from\nviruses. \n \nUse the arrow keys to move and hold Space Bar\nto dismiss this screen."
             paragraph(text, BLACK)
         
-    # --- Limit to 60 frames per second
+        # Limit FPS
         clock.tick(snake_speed)
+
+        #Display Update
         pygame.display.update()
+
     # Close the window and quit.
-    # If you forget this line, the program will 'hang'
-    # on exit if running from IDLE.
     pygame.quit()
     quit()
 
